@@ -33,7 +33,7 @@ export class InventoryController {
   }
 
   @Get('create') 
-  @Render('views/inventory/create-inventory.html') 
+  @Render('/inventories/create-inventory.html') 
   createForm() {
   }
 }

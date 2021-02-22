@@ -11,11 +11,11 @@ export class AppService {
   }
 
   getHome(): {} {
-    return {title: 'Mary Jones Nigeria Limited'};
+    return {title: 'Mary Jones Nigeria Limited home'};
   }
 
   getAboutUs(): {} {
-    return {title: 'About Us Page'};
+    return {title: 'About Us'};
   }
 
 }

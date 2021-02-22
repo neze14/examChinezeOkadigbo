@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { InventoryModule } from './inventory/inventory.module';
-import { DisplayModule } from './display/display.module';
 
 @Module({
-  imports: [InventoryModule, DisplayModule]
+  imports: [InventoryModule]
 })
 export class InventoryChinezeOkadigboModule {}
