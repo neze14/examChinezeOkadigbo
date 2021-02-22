@@ -1,0 +1,203 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="grid-container">
+    <div class="navigation-bar grid-item-row-1">
+        <div class="navigation-bar-left">
+            <div>
+                <a href="/" >Home</a>
+            </div>
+            <div>
+                <a href="/about-us">About Us</a>
+            </div>
+            <div>
+                <a href="/nest-chineze-okadigbo/views/inventory/create-inventory.html" class="active">Create Inventory</a>
+            </div>
+        </div>
+        <div class="navigation-bar-right">
+            <div>
+                <input type="search">
+                <button>Search</button>
+            </div>
+
+        </div>
+    </div>
+    <div class="grid-item-row-2">
+        <form class="box" id="createInventoryForm" action="/users" method="POST">
+            <fieldset id="createInventoryFormFieldSet" class="container">
+                <div class="field">
+                    <label class="label">Product name:</label>
+                    <div class="control has-icons-right">
+                        <input class="input" id="productName" name="productName" type="text" placeholder="Product name" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Target:</label>
+                    <div class="control has-icons-right">
+                        <input class="input" id="target" name="target" type="text" placeholder="Target" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Type:</label>
+                    <div class="control has-icons-right">
+                        <input class="input" id="type" name="type" type="text" placeholder="Type" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Sizes available:</label>
+                    <div class="control has-icons-right">
+                        <input class="input" id="sizesAvailable" name="sizesAvailable" type="text" placeholder="Sizes available" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Colours available:</label>
+                    <div class="control has-icons-right">
+                        <input class="input" id="coloursAvailable" name="coloursAvailable" type="text" placeholder="Colours available">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Photo URL:</label>
+                    <div class="control has-icons-right">
+                        <input class="input" id="photoUrl" name="photoUrl" type="text" placeholder="Photo URL" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Price per Unit:</label>
+                    <div class="control has-icons-right">
+                        <input class="input" id="pricePerUnit" name="pricePerUnit" type="number" placeholder="Price per Unit" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Quantity available:</label>
+                    <div class="control has-icons-right">
+                        <input class="input" id="quantityAvailable" name="quantityAvailable" type="number" placeholder="Quantity available" required>
+                    </div>
+                </div>
+                
+                
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button type="submit" id="submitCreateUserForm" class="button is-link is-small">Submit</button>
+                    </div>
+                    <div class="control">
+                        <button type="reset" class="button is-light is-small">Clear</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        
+    </div>
+</div>
+
+
+<section class="section">
+    <div class="container">
+        <div id="notification" class="notification container is-hidden animated slideInUp">
+            <button class="delete"></button>
+            <div id="notificationMessage">
+                {{notificationMessage}}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+{% endblock %}
+
+<script>
+    const createInventoryForm = document.getElementById('createInventoryForm');
+
+    createInventoryForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    //Get fields and check validities
+    const productName = document.getElementById('productName').value;
+    if (productName == '') {
+        productName.reportValidity();
+        return false;
+    }
+
+    const target = document.getElementById('target').value;
+    if (target == '') {
+        target.reportValidity();
+        return false;
+    }
+
+    const type = document.getElementById('email').value;
+    if (email == '') {
+        email.reportValidity();
+        return false;
+    }
+
+    const sizesAvailable = document.getElementById('sizesAvailable').value;
+    if (sizesAvailable == '') {
+        sizesAvailable.reportValidity();
+        return false;
+    }
+    
+    const coloursAvailable = document.getElementById('coloursAvailable').value;
+    
+    const photoUrl = document.getElementById('photoUrl').value;
+    if (photoUrl == '') {
+        photoUrl.reportValidity();
+        return false;
+    }
+
+    const pricePerUnit = document.getElementById('pricePerUnit').value;
+    if (pricePerUnit == '') {
+        pricePerUnit.reportValidity();
+        return false;
+    }
+
+    const quantityAvailable = document.getElementById('quantityAvailable').value;
+    if (quantityAvailable == '') {
+        quantityAvailable.reportValidity();
+        return false;
+    }
+
+
+    //start the button spinner
+    document.getElementById("submitCreateInventoryForm").classList.add("is-loading");
+
+    //prepare init for fetch
+    const init = {
+        method: 'Post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        //credentials: 'same-origin',
+        body: JSON.stringify({ productName, target, type, sizesAvailable, coloursAvailable, photoUrl, pricePerUnit, quantityAvailable })
+    }
+
+    //call fetch
+    fetch('/inventory', init)
+        .then(response => response.json())
+        .then(data => {
+            //alert(JSON.stringify(data))
+            //remove spinner class
+            document.getElementById("submitCreateInventoryForm").classList.remove("is-loading");
+            //set notification
+            document.getElementById("notificationMessage").innerHTML = 'User creation successful';
+            //add notification color class sent
+            document.getElementById("notification").classList.add("is-success");
+            //remove is-hidden from notificationWrapper
+            document.getElementById("notification").classList.remove("is-hidden");
+
+        })
+        .catch(error => {
+            //remove spinner class
+            document.getElementById("submitCreateInventoryForm").classList.remove("is-loading");
+
+            document.getElementById("notificationMessage").innerHTML = error.message;
+            //add notification color class sent
+            document.getElementById("notification").classList.add("is-danger");
+            //remove is-hidden from notificationWrapper
+            document.getElementById("notification").classList.remove("is-hidden");
+
+        });
+    })
+
+</script>
